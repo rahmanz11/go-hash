@@ -13,7 +13,7 @@ import (
 // Todo struct for request body
 type HashRequest struct {
 	Data      payloads.Data `json:"data"`
-	Algorithm string        `json:algorithm`
+	Algorithm string        `json:"algorithm"`
 }
 
 // Defining struct for response
