@@ -5,13 +5,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rahmanz11/go-hash/src/middleware"
-	"github.com/rahmanz11/go-hash/src/payloads"
 )
 
 // Hash request struct for request body
 type HashRequest struct {
-	Data      payloads.Data `json:"data"`
-	Algorithm string        `json:"algorithm"`
+	Data      []string `json:"data"`
+	Algorithm string   `json:"algorithm"`
 }
 
 // Defining struct for response
@@ -29,12 +28,8 @@ func CreateHash(context *gin.Context) {
 		return
 	}
 
-	// Matching data payloads struct with data request struct
-	data := payloads.Data{}
-	data.Value = req.Data.Value
-
 	// Create the hash
-	result := middleware.CreateHash(&data, req.Algorithm)
+	result := middleware.CreateHash(req.Data, req.Algorithm)
 	if result == "" {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Something went wrong"})
 		return

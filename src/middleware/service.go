@@ -6,28 +6,31 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/cespare/xxhash"
-	"github.com/rahmanz11/go-hash/src/payloads"
+	"github.com/jzelinskie/whirlpool"
 )
 
-func CreateHash(arr *payloads.Data, algo string) string {
-	fmt.Printf("%s", arr)
-	concatenated := strings.Join(arr.Value[:], "")
-	fmt.Println(concatenated)
+func CreateHash(data []string, algo string) string {
+	str := strings.Join(data[:], "")
 	hash := ""
 	switch algo {
+	case "sha512":
+		hash = getSha512(str)
 	case "sha256":
-		hash = getSha256(concatenated)
+		hash = getSha256(str)
 	case "md5":
-		hash = getMd5(concatenated)
+		hash = getMd5(str)
 	case "xxhash":
-		hash = getXxhash(concatenated)
+		hash = getXxhash(str)
+	case "whirlpool":
+		hash = getWhirlpool(str)
+	case "sha3256":
+		hash = getWhirlpool(str)
 	default:
-		hash = getSha512(concatenated)
+		hash = getSha512(str)
 	}
 
 	return hash
@@ -54,4 +57,10 @@ func getSha512(text string) string {
 	h := sha512.New()
 	h.Write([]byte(text))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func getWhirlpool(text string) string {
+	w := whirlpool.New()
+	w.Write([]byte(text))
+	return hex.EncodeToString(w.Sum(nil))
 }
