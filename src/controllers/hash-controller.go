@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +8,7 @@ import (
 	"github.com/rahmanz11/go-hash/src/payloads"
 )
 
-// Todo struct for request body
+// Hash request struct for request body
 type HashRequest struct {
 	Data      payloads.Data `json:"data"`
 	Algorithm string        `json:"algorithm"`
@@ -21,17 +19,16 @@ type HashResponse struct {
 	Hash string `json:"hash"`
 }
 
-// Create todo data to database by run this function
+// Create hash by run this function
 func CreateHash(context *gin.Context) {
 	var req HashRequest
 
 	// Binding request body json to request body struct
-	if err := context.ShouldBindJSON(&req.Data); err != nil {
+	if err := context.ShouldBindJSON(&req); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	res, _ := json.Marshal(req)
-	fmt.Println(string(res))
+
 	// Matching data payloads struct with data request struct
 	data := payloads.Data{}
 	data.Value = req.Data.Value
