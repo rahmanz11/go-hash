@@ -9,8 +9,8 @@ import (
 
 // Hash request struct for request body
 type HashRequest struct {
-	Data      []string `json:"data"`
-	Algorithm string   `json:"algorithm"`
+	Data      []string        `json:"data"`
+	Algorithm middleware.Algo `json:"algorithm"`
 }
 
 // Defining struct for response

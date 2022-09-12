@@ -11,24 +11,49 @@ import (
 
 	"github.com/cespare/xxhash"
 	"github.com/jzelinskie/whirlpool"
+	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/sha3"
 )
 
-func CreateHash(data []string, algo string) string {
+type Algo string
+
+const (
+	Sha512     Algo = "sha512"
+	Sha256     Algo = "sha256"
+	Md5        Algo = "md5"
+	Xxhash     Algo = "xxhash"
+	Whirlpool  Algo = "whirlpool"
+	Sha3256    Algo = "sha3256"
+	Sha3384    Algo = "sha3384"
+	Sha3512    Algo = "sha3512"
+	Blake2b384 Algo = "blake2b384"
+	Blake2b512 Algo = "blake2b512"
+)
+
+func CreateHash(data []string, algo Algo) string {
 	str := strings.Join(data[:], "")
 	hash := ""
 	switch algo {
-	case "sha512":
+	case Sha512:
 		hash = getSha512(str)
-	case "sha256":
+	case Sha256:
 		hash = getSha256(str)
-	case "md5":
+	case Md5:
 		hash = getMd5(str)
-	case "xxhash":
+	case Xxhash:
 		hash = getXxhash(str)
-	case "whirlpool":
+	case Whirlpool:
 		hash = getWhirlpool(str)
-	case "sha3256":
-		hash = getWhirlpool(str)
+	case Sha3256:
+		hash = getSha3256(str)
+	case Sha3384:
+		hash = getSha3384(str)
+	case Sha3512:
+		hash = getSha3512(str)
+	case Blake2b384:
+		hash = getBlake2b384(str)
+	case Blake2b512:
+		hash = getBlake2b512(str)
 	default:
 		hash = getSha512(str)
 	}
@@ -63,4 +88,32 @@ func getWhirlpool(text string) string {
 	w := whirlpool.New()
 	w.Write([]byte(text))
 	return hex.EncodeToString(w.Sum(nil))
+}
+
+func getSha3256(text string) string {
+	h := sha3.New512()
+	h.Write([]byte(text))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func getSha3384(text string) string {
+	h := sha3.New384()
+	h.Write([]byte(text))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func getSha3512(text string) string {
+	h := sha3.New512()
+	h.Write([]byte(text))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func getBlake2b384(text string) string {
+	h := blake2b.Sum384([]byte(text))
+	return hex.EncodeToString(h[:])
+}
+
+func getBlake2b512(text string) string {
+	h := blake2b.Sum512([]byte(text))
+	return hex.EncodeToString(h[:])
 }
