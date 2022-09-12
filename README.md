@@ -19,3 +19,18 @@ http://localhost:8080/hash
 {
     "hash": "6523488163744647430"
 }
+
+# supported "algorithm" value in request:
+sha512
+sha256
+md5
+xxhash
+whirlpool
+sha3256
+sha3384
+sha3512
+blake2b384
+blake2b512
+
+# default "algorithm":
+sha512
